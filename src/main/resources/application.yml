@@ -1,0 +1,26 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /job
+
+spring:
+  profiles:
+    active: dev
+  # freemarker
+  freemarker:
+    # 是否开启缓存 生产环境设置true
+    cache: true
+    charset: UTF-8
+    content-type: text/html
+    suffix: .html
+    template-loader-path: classpath:/templates
+    settings:
+      # 解决页面中取空值出现的异常
+      classic_compatible: true
+      template_update_delay: 0
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
