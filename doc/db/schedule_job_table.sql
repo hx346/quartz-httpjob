@@ -181,6 +181,7 @@ CREATE TABLE `schedule_job_info` (
 	`title` VARCHAR ( 100 ) NOT NULL COMMENT '标题',
 	`cron` VARCHAR ( 25 ) NOT NULL COMMENT 'cron表达式',
 	`params` VARCHAR ( 255 ) DEFAULT NULL COMMENT '请求参数',
+	`headers` VARCHAR ( 255 ) DEFAULT NULL COMMENT '请求头',
 	`remark` VARCHAR ( 500 ) DEFAULT NULL COMMENT '备注',
 	`job_group_id` INT ( 11 ) NOT NULL COMMENT '分组id，关联schedule_job_group',
 	`status` INT ( 1 ) NOT NULL COMMENT '任务状态',

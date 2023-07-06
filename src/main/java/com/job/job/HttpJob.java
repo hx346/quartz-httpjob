@@ -3,7 +3,7 @@ package com.job.job;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import com.job.constant.JobConstant;
 import com.job.constant.JobEnums;
@@ -24,9 +24,9 @@ import java.util.Date;
 
 /**
  * htt任务处理类
- * @author  
- * @date 2020/3/23 15:42
  *
+ * @author
+ * @date 2020/3/23 15:42
  * @DisallowConcurrentExecution 禁止并发执行多个相同定义的JobDetail
  **/
 @Slf4j
@@ -88,6 +88,7 @@ public class HttpJob extends QuartzJobBean {
 
     /**
      * 获取当天的任务日志报表id
+     *
      * @param day
      * @return
      */
@@ -104,6 +105,7 @@ public class HttpJob extends QuartzJobBean {
 
     /**
      * 根据jobInfo发送http请求
+     *
      * @param jobInfo
      * @return
      */
@@ -116,16 +118,16 @@ public class HttpJob extends QuartzJobBean {
         if (method.toUpperCase().equals(HttpMethod.GET.name())) {
             // get 请求
             if (StrUtil.isNotBlank(params)) {
-                response = HttpUtil.get(url, JSONUtil.parseObj(params));
+                response = HttpRequest.get(url).form(params).addHeaders(jobInfo.getHeaders()).execute().body();
             } else {
-                response = HttpUtil.get(url);
+                response = HttpRequest.get(url).addHeaders(jobInfo.getHeaders()).execute().body();
             }
         } else if (method.toUpperCase().equals(HttpMethod.POST.name())) {
             // post 请求
             if (StrUtil.isNotBlank(params)) {
-                response = HttpUtil.post(url, JSONUtil.parseObj(params));
+                response = HttpRequest.post(url).form(params).addHeaders(jobInfo.getHeaders()).execute().body();
             } else {
-                response = HttpUtil.post(url, "");
+                response = HttpRequest.post(url).addHeaders(jobInfo.getHeaders()).execute().body();
             }
         }
 

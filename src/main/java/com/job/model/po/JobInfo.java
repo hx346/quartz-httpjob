@@ -7,9 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Map;
 
 /**
- * @author  
+ * @author
  */
 @Table(name = "schedule_job_info")
 @Data
@@ -18,7 +19,7 @@ public class JobInfo {
      * 主键
      */
     @Id
-    @GeneratedValue(generator="JDBC")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
     /**
@@ -45,6 +46,10 @@ public class JobInfo {
      * 请求参数
      */
     private String params;
+    /**
+     * 请求头
+     */
+    private Map<String, String> headers;
 
     /**
      * 备注

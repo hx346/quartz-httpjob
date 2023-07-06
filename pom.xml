@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.job</groupId>
-    <artifactId>quartz-job</artifactId>
+    <artifactId>quartz-httpjob</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>quartz-job</name>
     <description>Demo project for Spring Boot</description>
@@ -93,7 +93,7 @@
     </dependencies>
 
     <build>
-        <finalName>quartz-job</finalName>
+        <finalName>quartz-httpjob</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
