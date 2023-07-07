@@ -3,6 +3,7 @@ package com.job.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.job.constant.JobConstant;
 import com.job.dao.UserMapper;
@@ -13,13 +14,12 @@ import com.job.util.PageHelperUtil;
 import com.job.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author  
+ * @author
  * @date 2020/3/23 18:30
  **/
 @Service
@@ -34,6 +34,7 @@ public class UserService {
 
     /**
      * 用户名、密码校验
+     *
      * @param username
      * @param password
      * @return
@@ -45,13 +46,14 @@ public class UserService {
             User query = new User();
             query.setUsername(username);
             query.setPassword(pwd);
-            return userMapper.selectOne(query);
+            return userMapper.selectOne(new QueryWrapper<>(query));
         }
         return null;
     }
 
     /**
      * 修改密码
+     *
      * @param oldPwd
      * @param newPwd
      * @return
@@ -69,7 +71,7 @@ public class UserService {
         String newSign = StrUtil.concat(false, userInfo.getUsername(), newPwd);
         String newPassword = SecureUtil.md5(newSign);
         userInfo.setPassword(newPassword);
-        userMapper.updateByPrimaryKeySelective(userInfo);
+        userMapper.updateById(userInfo);
         // 更新session中userInfo
         SessionUtil.putUserInfo(userInfo);
         return JobConstant.SUCCESS_CODE;
@@ -77,27 +79,25 @@ public class UserService {
 
     /**
      * 分页获取用户列表
+     *
      * @param userQuery
      * @return
      */
     public PageVO<User> selectUser(UserQuery userQuery) {
         PageVO<User> page = new PageVO<>();
-        Example example = new Example(User.class);
-        if (userQuery != null && StrUtil.isNotBlank(userQuery.getUsername())) {
-            example.createCriteria().andLike("username", "%" + userQuery.getUsername() + "%");
-        }
         PageHelperUtil.startPage(userQuery.getPage(), userQuery.getLimit());
-        List<User> users = userMapper.selectByExample(example);
+        List<User> users = userMapper.selectList(new QueryWrapper<User>().like("username", new StringBuilder().append("%").append(userQuery.getUsername()).append("%").toString()));
         PageInfo<User> pageInfo = new PageInfo<>(users);
         if (pageInfo != null && pageInfo.getTotal() > 0) {
             page.setList(users);
-            page.setTotal((int)pageInfo.getTotal());
+            page.setTotal((int) pageInfo.getTotal());
         }
         return page;
     }
 
     /**
      * 删除用户
+     *
      * @param userId
      * @return
      */
@@ -108,16 +108,17 @@ public class UserService {
         } else if (userInfo.getId().equals(userId)) {
             return "无法删除自己";
         }
-        User userInDB = userMapper.selectByPrimaryKey(userId);
+        User userInDB = userMapper.selectById(userId);
         if (userInDB == null) {
             return "删除用户不存在";
         }
-        userMapper.deleteByPrimaryKey(userId);
+        userMapper.deleteById(userId);
         return JobConstant.SUCCESS_CODE;
     }
 
     /**
      * 新增用户
+     *
      * @param user
      * @return
      */
@@ -127,7 +128,7 @@ public class UserService {
         }
         User query = new User();
         query.setUsername(user.getUsername());
-        int count = userMapper.selectCount(query);
+        Long count = userMapper.selectCount(new QueryWrapper<>(query));
         if (count > 0) {
             return "该用户名已被占用";
         }
@@ -136,7 +137,7 @@ public class UserService {
         String pwd = SecureUtil.md5(sign);
         user.setPassword(pwd);
         user.setCreateTime(DateUtil.date());
-        userMapper.insertSelective(user);
+        userMapper.insert(user);
         return JobConstant.SUCCESS_CODE;
     }
 }

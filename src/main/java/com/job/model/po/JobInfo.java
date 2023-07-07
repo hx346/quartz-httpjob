@@ -1,25 +1,24 @@
 package com.job.model.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 import java.util.Map;
 
 /**
  * @author
  */
-@Table(name = "schedule_job_info")
+@TableName("schedule_job_info")
 @Data
 public class JobInfo {
     /**
      * 主键
      */
-    @Id
-    @GeneratedValue(generator = "JDBC")
+    @TableId
     private Integer id;
 
     /**
@@ -47,8 +46,9 @@ public class JobInfo {
      */
     private String params;
     /**
-     * 请求头
+     * 请求头列表
      */
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private Map<String, String> headers;
 
     /**
@@ -59,7 +59,7 @@ public class JobInfo {
     /**
      * 分组id，关联schedule_job_group
      */
-    @Column(name = "job_group_id")
+    @TableField("job_group_id")
     private Integer jobGroupId;
 
     /**
@@ -70,7 +70,7 @@ public class JobInfo {
     /**
      * 创建时间
      */
-    @Column(name = "create_time")
+    @TableField("create_time")
     private Date createTime;
 
 }

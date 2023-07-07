@@ -3,7 +3,7 @@ spring:
     username: root
     password: FaRJTLDPB%aTj#6o
     url: jdbc:mysql://localhost:3306/job?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   quartz:
     #相关属性配置
     properties:
@@ -27,12 +27,14 @@ spring:
     #数据库方式
     job-store-type: jdbc
 
-mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
-  type-aliases-package: com.job.model
+#mybatis:
+#  mapper-locations: classpath:mapper/*Mapper.xml
+#  type-aliases-package: com.job.model
 
 # mybatis日志输出级别
 logging:
   level:
-    com.job.dao: info
+    com.job.dao: debug
+
+
 

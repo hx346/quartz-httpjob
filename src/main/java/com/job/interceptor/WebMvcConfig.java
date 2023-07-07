@@ -14,7 +14,7 @@ import java.util.List;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-//    @Autowired
+//    @Resource
 //    private LoginInterceptor loginInterceptor;
 
     private final static List<String> EXCLUDE_PATH = new ArrayList<>();
@@ -49,7 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false);
     }
 
 

@@ -1,22 +1,21 @@
 package com.job.model.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * 任务日志报表实体
- * @author  
+ *
+ * @author
  */
-@Table(name = "schedule_job_log_report")
+@TableName("schedule_job_log_report")
 @Data
 public class JobLogReport {
-    @Id
-    @GeneratedValue(generator="JDBC")
+    @TableId
     private Integer id;
 
     /**
@@ -27,19 +26,19 @@ public class JobLogReport {
     /**
      * 运行中-日志数量
      */
-    @Column(name = "running_count")
+    @TableField("running_count")
     private Integer runningCount;
 
     /**
      * 执行成功-日志数量
      */
-    @Column(name = "success_count")
+    @TableField("success_count")
     private Integer successCount;
 
     /**
      * 执行失败-日志数量
      */
-    @Column(name = "fail_count")
+    @TableField("fail_count")
     private Integer failCount;
 
 }

@@ -11,18 +11,19 @@ import com.job.model.vo.ResultVO;
 import com.job.service.UserService;
 import com.job.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * 用户处理控制器
- * @author  
+ *
+ * @author
  * @date 2020/3/23 18:29
  **/
 @Controller
@@ -33,11 +34,12 @@ public class UserController {
     /**
      * 用户service
      */
-    @Autowired
+    @Resource
     private UserService userService;
 
     /**
      * 获取验证码
+     *
      * @param response
      */
     @RequestMapping("/getVerityCode")
@@ -54,6 +56,7 @@ public class UserController {
 
     /**
      * 登录验证
+     *
      * @param username
      * @param password
      * @param verityCode
@@ -78,6 +81,7 @@ public class UserController {
 
     /**
      * 修改密码
+     *
      * @param oldPwd
      * @param newPwd
      * @return
@@ -98,6 +102,7 @@ public class UserController {
 
     /**
      * 分页获取用户数据
+     *
      * @param userQuery
      * @return
      */
@@ -110,6 +115,7 @@ public class UserController {
 
     /**
      * 新增用户
+     *
      * @param user
      * @return
      */
@@ -135,6 +141,7 @@ public class UserController {
 
     /**
      * 删除用户 - 普通用户无删除权限
+     *
      * @param userId
      * @return
      */

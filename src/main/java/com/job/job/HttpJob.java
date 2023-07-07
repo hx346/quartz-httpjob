@@ -5,6 +5,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.job.constant.JobConstant;
 import com.job.constant.JobEnums;
 import com.job.dao.JobLogMapper;
@@ -83,7 +84,7 @@ public class HttpJob extends QuartzJobBean {
         jobLog.setJobInfoId(jobInfo.getId());
         jobLog.setExecuteParams(jobInfo.getParams());
         jobLog.setConsumeTime(consumeTime);
-        jobLogMapper.insertSelective(jobLog);
+        jobLogMapper.insert(jobLog);
     }
 
     /**
@@ -95,9 +96,9 @@ public class HttpJob extends QuartzJobBean {
     private int getJobLogReportByDay(Date day) {
         JobLogReport search = new JobLogReport();
         search.setDay(day);
-        JobLogReport jobLogReport = jobLogReportMapper.selectOne(search);
+        JobLogReport jobLogReport = jobLogReportMapper.selectOne(new QueryWrapper<>(search));
         if (jobLogReport == null) {
-            jobLogReportMapper.insertSelective(search);
+            jobLogReportMapper.insert(search);
             return search.getId();
         }
         return jobLogReport.getId();

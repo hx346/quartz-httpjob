@@ -3,6 +3,7 @@ package com.job.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.job.constant.JobConstant;
 import com.job.constant.JobEnums;
 import com.job.dao.JobGroupMapper;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
- * @author  
+ * @author
  * @date 2020/4/1 14:12
  **/
 @Slf4j
@@ -41,6 +42,7 @@ public class JobManagerService {
 
     /**
      * 判断是否需要创建新的任务分组
+     *
      * @param jobInfoBO
      * @return
      */
@@ -48,10 +50,10 @@ public class JobManagerService {
         if (jobInfoBO.getJobGroupId() == null && StrUtil.isNotBlank(jobInfoBO.getJobGroupName())) {
             JobGroup findOne = new JobGroup();
             findOne.setName(jobInfoBO.getJobGroupName());
-            int count = jobGroupMapper.selectCount(findOne);
+            Long count = jobGroupMapper.selectCount(new QueryWrapper<>(findOne));
             if (count == 0) {
                 findOne.setCreateTime(DateUtil.date());
-                jobGroupMapper.insertSelective(findOne);
+                jobGroupMapper.insert(findOne);
                 jobInfoBO.setJobGroupId(findOne.getId());
             } else {
                 return "该分组名已存在";
@@ -62,6 +64,7 @@ public class JobManagerService {
 
     /**
      * 添加一个任务,并开启执行
+     *
      * @param jobInfoBO
      * @return
      */
@@ -75,13 +78,13 @@ public class JobManagerService {
         // 2.新增jonInfo
         JobInfo checkJobTitle = new JobInfo();
         checkJobTitle.setTitle(jobInfoBO.getTitle());
-        int count = jobInfoMapper.selectCount(checkJobTitle);
+        Long count = jobInfoMapper.selectCount(new QueryWrapper<>(checkJobTitle));
         if (count > 0) {
             return "该任务名称已被占用";
         }
         jobInfoBO.setStatus(JobEnums.JobStatus.RUNNING.status());
         jobInfoBO.setCreateTime(DateUtil.date());
-        jobInfoMapper.insertSelective(jobInfoBO);
+        jobInfoMapper.insert(jobInfoBO);
         int jobInfoId = jobInfoBO.getId();
         jobInfoBO.setId(jobInfoId);
 
@@ -109,12 +112,13 @@ public class JobManagerService {
 
     /**
      * 暂停、删除、恢复任务
+     *
      * @param scheduler
      * @param jobInfoId
      * @return
      */
     public String pauseOrRemoveOrRestoreJob(Scheduler scheduler, Integer jobInfoId, Integer status) {
-        JobInfo jobInfo = jobInfoMapper.selectByPrimaryKey(jobInfoId);
+        JobInfo jobInfo = jobInfoMapper.selectById(jobInfoId);
         if (jobInfo == null || JobUtil.isDeletedJob(jobInfo)) {
             return "no http job matched";
         }
@@ -151,7 +155,7 @@ public class JobManagerService {
             JobInfo update = new JobInfo();
             update.setId(jobInfo.getId());
             update.setStatus(status);
-            jobInfoMapper.updateByPrimaryKeySelective(update);
+            jobInfoMapper.updateById(update);
             return JobConstant.SUCCESS_CODE;
         } catch (SchedulerException e) {
             log.error("jobInfoId = {} pauseOrRemoveOrRestoreJob error : {}", jobInfoId, e);
@@ -161,12 +165,13 @@ public class JobManagerService {
 
     /**
      * 立即执行任务
+     *
      * @param scheduler
      * @param jobInfoId
      * @return
      */
     public String executeJob(Scheduler scheduler, Integer jobInfoId) {
-        JobInfo jobInfo = jobInfoMapper.selectByPrimaryKey(jobInfoId);
+        JobInfo jobInfo = jobInfoMapper.selectById(jobInfoId);
         if (jobInfo == null || JobUtil.isDeletedJob(jobInfo)) {
             return "no http job matched";
         }
@@ -186,14 +191,15 @@ public class JobManagerService {
 
     /**
      * 修改任务
-     *    每次编辑，都是新增一个调度任务替换旧的调度任务
+     * 每次编辑，都是新增一个调度任务替换旧的调度任务
+     *
      * @param scheduler
      * @param jobInfoBO
      * @return
      */
     @Transactional(rollbackFor = RuntimeException.class)
     public String editJob(Scheduler scheduler, JobInfoBO jobInfoBO) {
-        JobInfo jobInfoInDB = jobInfoMapper.selectByPrimaryKey(jobInfoBO.getId());
+        JobInfo jobInfoInDB = jobInfoMapper.selectById(jobInfoBO.getId());
         if (jobInfoInDB == null) {
             return "无法匹配指定任务";
         }
@@ -205,7 +211,7 @@ public class JobManagerService {
         if (!JobConstant.SUCCESS_CODE.equals(checkRes)) {
             return checkRes;
         }
-        jobInfoMapper.updateByPrimaryKeySelective(jobInfoBO);
+        jobInfoMapper.updateById(jobInfoBO);
         try {
             JobKey jobKey = JobUtil.getJobKey(jobInfoBO);
             // 删除旧任务

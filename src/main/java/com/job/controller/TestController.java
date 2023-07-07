@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author  
+ * @author
  * @date 2020/3/24 15:08
  **/
 @RestController
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
     /**
+     * @return ResultVO
+     * @throws
      * @description get测试接口
      * @author hexin
-     * @throws
-     * @return ResultVO
      * @time 2023-7-6 10:00
      */
     @RequestMapping("/get")

@@ -18,16 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronExpression;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
 
 /**
- * @author  
+ * @author
  * @date 2020/3/24 15:08
  **/
 @RestController
@@ -37,23 +37,24 @@ public class JobController {
     /**
      * 调度器
      */
-    @Autowired
+    @Resource
     private Scheduler scheduler;
 
     /**
      * JobManagerService
      */
-    @Autowired
+    @Resource
     private JobManagerService jobManagerService;
 
     /**
      * JobService
      */
-    @Autowired
+    @Resource
     private JobService jobService;
 
     /**
      * 参数校验
+     *
      * @param jobInfoBO
      * @return
      */
@@ -71,7 +72,7 @@ public class JobController {
             return "业务部门不能为空";
         }
         // 校验corn表达式
-        if(!CronExpression.isValidExpression(jobInfoBO.getCron())) {
+        if (!CronExpression.isValidExpression(jobInfoBO.getCron())) {
             return "非法的任务corn表达式";
         }
         // 有参数，校验参数是否为json格式
@@ -83,6 +84,7 @@ public class JobController {
 
     /**
      * 新增一个http定时任务
+     *
      * @param jobInfoBO
      * @return
      */
@@ -102,6 +104,7 @@ public class JobController {
 
     /**
      * 编辑任务
+     *
      * @param jobInfoBO
      * @return
      */
@@ -121,6 +124,7 @@ public class JobController {
 
     /**
      * 暂停一个http定时任务
+     *
      * @return
      * @throws SchedulerException
      */
@@ -136,6 +140,7 @@ public class JobController {
 
     /**
      * 恢复一个http定时任务
+     *
      * @param jobInfoId
      * @return
      */
@@ -151,6 +156,7 @@ public class JobController {
 
     /**
      * 删除一个http定时任务
+     *
      * @param jobInfoId
      * @return
      */
@@ -166,6 +172,7 @@ public class JobController {
 
     /**
      * 触发执行一次任务
+     *
      * @param jobInfoId
      * @return
      */
@@ -181,6 +188,7 @@ public class JobController {
 
     /**
      * 分页获取http任务列表
+     *
      * @param jobInfoQuery
      * @return
      */
@@ -192,6 +200,7 @@ public class JobController {
 
     /**
      * 分页查询指定任务的执行日志
+     *
      * @param jobLogQuery
      * @return
      */
@@ -206,6 +215,7 @@ public class JobController {
 
     /**
      * 获取任务执行数据统计
+     *
      * @param startTime
      * @param endTime
      * @return

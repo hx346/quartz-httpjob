@@ -1,10 +1,11 @@
 package com.job.dao;
 
+import com.job.config.MyBaseMapper;
 import com.job.model.po.JobGroup;
-import tk.mybatis.mapper.common.Mapper;
+
 
 /**
- * @author  
+ * @author
  */
-public interface JobGroupMapper extends Mapper<JobGroup> {
+public interface JobGroupMapper extends MyBaseMapper<JobGroup> {
 }

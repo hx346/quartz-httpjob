@@ -1,25 +1,23 @@
 package com.job.model.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * @author  
+ * @author
  */
-@Table(name = "schedule_job_user")
+@TableName("schedule_job_user")
 @Data
 public class User {
     /**
      * 主键
      */
-    @Id
-    @GeneratedValue(generator="JDBC")
+    @TableId
     private Integer id;
 
     /**
@@ -41,7 +39,6 @@ public class User {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "create_time")
+    @TableField("create_time")
     private Date createTime;
-
 }

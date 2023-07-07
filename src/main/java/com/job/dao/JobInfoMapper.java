@@ -1,20 +1,21 @@
 package com.job.dao;
 
+import com.job.config.MyBaseMapper;
 import com.job.model.bo.JobInfoBO;
 import com.job.model.po.JobInfo;
 import com.job.model.query.JobInfoQuery;
 import org.apache.ibatis.annotations.Param;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
 /**
- * @author  
+ * @author
  */
-public interface JobInfoMapper extends Mapper<JobInfo> {
+public interface JobInfoMapper extends MyBaseMapper<JobInfo> {
 
     /**
      * 查询jobInfo
+     *
      * @param query
      * @return
      */

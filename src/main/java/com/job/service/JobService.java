@@ -1,6 +1,7 @@
 package com.job.service;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.job.constant.JobEnums;
 import com.job.dao.JobGroupMapper;
@@ -19,13 +20,12 @@ import com.job.util.JobUtil;
 import com.job.util.PageHelperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * @author  
+ * @author
  * @date 2020/3/24 16:36
  **/
 @Slf4j
@@ -58,6 +58,7 @@ public class JobService {
 
     /**
      * 查询http任务列表
+     *
      * @param jobInfoQuery
      * @return
      */
@@ -68,17 +69,16 @@ public class JobService {
         PageInfo<JobInfoBO> pageInfo = new PageInfo<>(jobInfoBOs);
         if (pageInfo != null && pageInfo.getTotal() > 0) {
             // 遍历设置下一次运行时间
-            jobInfoBOs.forEach(bo -> {
-                bo.setNextExecuteTime(JobUtil.getNextExecuteTime(bo));
-            });
+            jobInfoBOs.forEach(bo -> bo.setNextExecuteTime(JobUtil.getNextExecuteTime(bo)));
             page.setList(jobInfoBOs);
-            page.setTotal((int)pageInfo.getTotal());
+            page.setTotal((int) pageInfo.getTotal());
         }
         return page;
     }
 
     /**
      * 查询指定任务的日志
+     *
      * @param jobLogQuery
      * @return
      */
@@ -89,7 +89,7 @@ public class JobService {
         PageInfo<JobLogBO> pageInfo = new PageInfo<>(jobLogs);
         if (pageInfo != null && pageInfo.getTotal() > 0) {
             page.setList(jobLogs);
-            page.setTotal((int)pageInfo.getTotal());
+            page.setTotal((int) pageInfo.getTotal());
         }
 
         return page;
@@ -97,35 +97,38 @@ public class JobService {
 
     /**
      * 获取数据库中已有任务分组
+     *
      * @return
      */
     public List<JobGroup> selectJobGroup() {
-        Example example = new Example(JobGroup.class);
-        example.setOrderByClause("create_time desc");
-        return jobGroupMapper.selectByExample(example);
+        return jobGroupMapper.selectList(new QueryWrapper<JobGroup>().orderByDesc("create_time"));
     }
 
     /**
      * 获取任务数统计
+     *
      * @return
      */
-    public Map<String,Integer> getJobInfoAmountStatistic() {
-        HashMap<String, Integer> res = new HashMap<>(4);
-        JobInfo search = new JobInfo();
+    public Map<String, Long> getJobInfoAmountStatistic() {
+        HashMap<String, Long> res = new HashMap<>(4);
         // 总任务数
-        int totalCount = jobInfoMapper.selectCount(search);
+        Long totalCount = jobInfoMapper.selectCount(new QueryWrapper<>());
 
+
+        JobInfo search = new JobInfo();
         // 正常运行任务数
         search.setStatus(JobEnums.JobStatus.RUNNING.status());
-        int normalCount = jobInfoMapper.selectCount(search);
+        Long normalCount = jobInfoMapper.selectCount(new QueryWrapper<>(search));
 
         // 已暂停任务数
+        search = new JobInfo();
         search.setStatus(JobEnums.JobStatus.PAUSING.status());
-        int pausedCount = jobInfoMapper.selectCount(search);
+        Long pausedCount = jobInfoMapper.selectCount(new QueryWrapper<>(search));
 
         // 已删除任务数
+        search = new JobInfo();
         search.setStatus(JobEnums.JobStatus.DELETED.status());
-        int deletedCount = jobInfoMapper.selectCount(search);
+        Long deletedCount = jobInfoMapper.selectCount(new QueryWrapper<>(search));
 
         res.put("totalCount", totalCount);
         res.put("normalCount", normalCount);
@@ -136,6 +139,7 @@ public class JobService {
 
     /**
      * 查询指定时间范围内的任务执行数据报表
+     *
      * @param startDate
      * @param endDate
      * @return
@@ -155,10 +159,10 @@ public class JobService {
         Integer pie_success_r = 0;
         Integer pie_fail_r = 0;
 
-        Example example = new Example(JobLogReport.class);
-        example.setOrderByClause("day");
-        example.createCriteria().andBetween("day", startDate, endDate);
-        List<JobLogReport> reports = jobLogReportMapper.selectByExample(example);
+        List<JobLogReport> reports = jobLogReportMapper
+                .selectList(new QueryWrapper<JobLogReport>()
+                        .orderByDesc("day")
+                        .between("day", startDate, endDate));
         while (DateUtil.compare(startDate, endDate) < 0) {
             line_x.add(DateUtil.formatDate(startDate));
             int runningCount = 0;
@@ -202,9 +206,10 @@ public class JobService {
 
     /**
      * 根据id查找指定任务
+     *
      * @param jobInfoId
      */
     public JobInfo selectJobInfoById(Integer jobInfoId) {
-        return jobInfoMapper.selectByPrimaryKey(jobInfoId);
+        return jobInfoMapper.selectOne(new QueryWrapper<>(new JobInfo()).eq("id", jobInfoId));
     }
 }
