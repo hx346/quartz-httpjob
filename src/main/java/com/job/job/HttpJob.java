@@ -10,6 +10,7 @@ import com.job.constant.JobConstant;
 import com.job.constant.JobEnums;
 import com.job.dao.JobLogMapper;
 import com.job.dao.JobLogReportMapper;
+import com.job.model.entity.Header;
 import com.job.model.po.JobInfo;
 import com.job.model.po.JobLog;
 import com.job.model.po.JobLogReport;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * htt任务处理类
@@ -117,20 +121,24 @@ public class HttpJob extends QuartzJobBean {
         String url = jobInfo.getUrl();
         String method = jobInfo.getMethod();
         String params = jobInfo.getParams();
+        Map<String, String> headers = jobInfo.getHeaders() != null ?
+                jobInfo.getHeaders().stream()
+                        .collect(Collectors.toMap(Header::getFieldName, Header::getValue))
+                : new HashMap<>();
         log.info("url = {}, method = {}, params = {}", url, method, params);
         if (method.toUpperCase().equals(HttpMethod.GET.name())) {
             // get 请求
             if (StrUtil.isNotBlank(params)) {
-                response = HttpRequest.get(url).form(params).addHeaders(jobInfo.getHeaders()).execute().body();
+                response = HttpRequest.get(url).form(params).addHeaders(headers).execute().body();
             } else {
-                response = HttpRequest.get(url).addHeaders(jobInfo.getHeaders()).execute().body();
+                response = HttpRequest.get(url).addHeaders(headers).execute().body();
             }
         } else if (method.toUpperCase().equals(HttpMethod.POST.name())) {
             // post 请求
             if (StrUtil.isNotBlank(params)) {
-                response = HttpRequest.post(url).form(params).addHeaders(jobInfo.getHeaders()).execute().body();
+                response = HttpRequest.post(url).form(params).addHeaders(headers).execute().body();
             } else {
-                response = HttpRequest.post(url).addHeaders(jobInfo.getHeaders()).execute().body();
+                response = HttpRequest.post(url).addHeaders(headers).execute().body();
             }
         }
 

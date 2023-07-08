@@ -18,9 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronExpression;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -88,8 +86,8 @@ public class JobController {
      * @param jobInfoBO
      * @return
      */
-    @RequestMapping("/addJob")
-    public ResultVO addJob(JobInfoBO jobInfoBO) {
+    @PostMapping("/addJob")
+    public ResultVO addJob(@ModelAttribute JobInfoBO jobInfoBO) {
         String validate = commonValidate(jobInfoBO);
         if (!JobConstant.SUCCESS_CODE.equals(validate)) {
             return ResultVO.failure(validate);

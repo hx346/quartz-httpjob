@@ -16,10 +16,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <cn.hutool.hutool-all.version>5.0.7</cn.hutool.hutool-all.version>
+        <cn.hutool.hutool-all.version>5.8.18</cn.hutool.hutool-all.version>
         <!--        <tk.mybatis.version>2.1.5</tk.mybatis.version>-->
         <mybatisPlus.version>3.5.3.1</mybatisPlus.version>
-        <pagehelper.version>1.4.3</pagehelper.version>
+        <pagehelper.version>1.4.6</pagehelper.version>
     </properties>
 
     <dependencies>
@@ -89,6 +89,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
             <optional>true</optional>
         </dependency>
         <!-- hutool -->

@@ -3,11 +3,12 @@ package com.job.model.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.job.handler.HeaderListTypeHandler;
+import com.job.model.entity.Header;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author
@@ -48,8 +49,8 @@ public class JobInfo {
     /**
      * 请求头列表
      */
-    @TableField(typeHandler = JacksonTypeHandler.class)
-    private Map<String, String> headers;
+    @TableField(typeHandler = HeaderListTypeHandler.class)
+    private List<Header> headers;
 
     /**
      * 备注
