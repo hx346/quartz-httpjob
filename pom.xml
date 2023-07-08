@@ -11,7 +11,7 @@
     <groupId>com.job</groupId>
     <artifactId>quartz-httpjob</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>quartz-job</name>
+    <name>quartz-httpjob</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

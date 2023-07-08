@@ -19,6 +19,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -32,6 +33,7 @@ import java.util.Date;
  **/
 @Slf4j
 @DisallowConcurrentExecution
+@Component
 public class HttpJob extends QuartzJobBean {
 
     /**
