@@ -2,6 +2,7 @@ package com.job.controller;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.job.constant.JobConstant;
@@ -19,6 +20,7 @@ import org.quartz.CronExpression;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.*;
+import sun.net.util.URLUtil;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -62,6 +64,9 @@ public class JobController {
         }
         if (StrUtil.isBlank(jobInfoBO.getUrl())) {
             return "URL地址不能为空";
+        }
+        if (!Validator.isUrl(jobInfoBO.getUrl())) {
+            return "URL不合法";
         }
         if (StrUtil.isBlank(jobInfoBO.getMethod())) {
             return "请求方式不能为空";

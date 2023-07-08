@@ -118,22 +118,22 @@ public class HttpJob extends QuartzJobBean {
      */
     private String sendHttpRequest(JobInfo jobInfo) {
         String response = null;
-        String url = jobInfo.getUrl();
-        String method = jobInfo.getMethod();
+        String url = jobInfo.getUrl().trim();
+        String method = jobInfo.getMethod().trim();
         String params = jobInfo.getParams();
         Map<String, String> headers = jobInfo.getHeaders() != null ?
                 jobInfo.getHeaders().stream()
                         .collect(Collectors.toMap(Header::getFieldName, Header::getValue))
                 : new HashMap<>();
         log.info("url = {}, method = {}, params = {}", url, method, params);
-        if (method.toUpperCase().equals(HttpMethod.GET.name())) {
+        if (method.toUpperCase().trim().equals(HttpMethod.GET.name())) {
             // get 请求
             if (StrUtil.isNotBlank(params)) {
                 response = HttpRequest.get(url).form(params).addHeaders(headers).execute().body();
             } else {
                 response = HttpRequest.get(url).addHeaders(headers).execute().body();
             }
-        } else if (method.toUpperCase().equals(HttpMethod.POST.name())) {
+        } else if (method.toUpperCase().trim().equals(HttpMethod.POST.name())) {
             // post 请求
             if (StrUtil.isNotBlank(params)) {
                 response = HttpRequest.post(url).form(params).addHeaders(headers).execute().body();
