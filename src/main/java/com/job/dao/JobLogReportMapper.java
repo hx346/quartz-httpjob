@@ -4,7 +4,7 @@ import com.job.model.po.JobLogReport;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
- * @author  
+ * 任务执行报表表的 Mapper 接口，负责更新和查询任务执行统计数据。
  */
 public interface JobLogReportMapper extends Mapper<JobLogReport> {
 
