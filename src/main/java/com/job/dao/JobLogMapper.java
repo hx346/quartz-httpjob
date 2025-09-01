@@ -9,7 +9,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 /**
- * @author  
+ * 任务执行日志表的 Mapper 接口，提供日志查询等数据库操作。
  */
 public interface JobLogMapper extends Mapper<JobLog> {
 
