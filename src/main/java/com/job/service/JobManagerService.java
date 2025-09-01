@@ -75,7 +75,7 @@ public class JobManagerService {
         if (!JobConstant.SUCCESS_CODE.equals(checkRes)) {
             return checkRes;
         }
-        // 2.新增jonInfo
+        // 2.新增 jobInfo
         JobInfo checkJobTitle = new JobInfo();
         checkJobTitle.setTitle(jobInfoBO.getTitle());
         Long count = jobInfoMapper.selectCount(new QueryWrapper<>(checkJobTitle));

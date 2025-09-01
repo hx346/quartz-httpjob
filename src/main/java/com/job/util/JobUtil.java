@@ -78,9 +78,8 @@ public class JobUtil {
 
     /**
      * 获取任务下一次运行时间
-     * @param jobInfo
-     * @return
-     * @throws ParseException
+     * @param jobInfo 任务信息
+     * @return 下一次执行时间, 如果 cron 表达式非法则返回 {@code null}
      */
     public static Date getNextExecuteTime(JobInfo jobInfo) {
         if (jobInfo != null && StrUtil.isNotBlank(jobInfo.getCron())) {
@@ -95,15 +94,12 @@ public class JobUtil {
     }
 
     /**
-     * 判断该是否为已删除的任务
-     * @param jobInfo
-     * @return
+     * 判断该任务是否已删除
+     * @param jobInfo 任务信息
+     * @return true 表示任务已删除
      */
     public static boolean isDeletedJob(JobInfo jobInfo) {
-        if (jobInfo != null && !JobEnums.JobStatus.DELETED.status().equals(jobInfo.getStatus())) {
-            return false;
-        }
-        return true;
+        return jobInfo != null && JobEnums.JobStatus.DELETED.status().equals(jobInfo.getStatus());
     }
 
 }
