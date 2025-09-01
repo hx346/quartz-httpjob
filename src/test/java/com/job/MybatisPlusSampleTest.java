@@ -5,7 +5,7 @@ import com.job.dao.JobInfoMapper;
 import com.job.model.query.JobInfoQuery;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @MybatisPlusTest
 class MybatisPlusSampleTest {

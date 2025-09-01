@@ -5,110 +5,81 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
-
 /**
- * @author  
+ * 通用响应对象
  */
 @Data
 public class ResultVO<T> implements Serializable {
 
-	/**
-	 * 请求状态码
-	 */
-	private Integer status;
+    /**
+     * 请求状态码
+     */
+    private Integer status;
 
-	/**
-	 * 请求状态描述
-	 */
-	private String message;
+    /**
+     * 请求状态描述
+     */
+    private String message;
 
-	/**
-	 * 响应数据
-	 */
-	private T data;
+    /**
+     * 响应数据
+     */
+    private T data;
 
-	/**
-	 * 请求成功
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> success() {
-		ResultVO<T> vo = new ResultVO<>();
-		vo.setStatus(HttpStatus.OK.value());
-		vo.setMessage(HttpStatus.OK.getReasonPhrase());
-		return vo;
-	}
+    private static <T> ResultVO<T> of(HttpStatus status, String message, T data) {
+        ResultVO<T> vo = new ResultVO<>();
+        vo.setStatus(status.value());
+        vo.setMessage(message != null ? message : status.getReasonPhrase());
+        vo.setData(data);
+        return vo;
+    }
 
-	/**
-	 * 请求成功，指定响应提示
-	 * @param message
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> success(String message) {
-		ResultVO<T> vo = success();
-		vo.setMessage(message);
-		return vo;
-	}
+    /**
+     * 请求成功
+     */
+    public static <T> ResultVO<T> success() {
+        return of(HttpStatus.OK, null, null);
+    }
 
-	/**
-	 * 请求成功，指定响应数据
-	 * @param t
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> success(T t) {
-		ResultVO<T> vo = success();
-		vo.setData(t);
-		return vo;
-	}
+    /**
+     * 请求成功，指定响应提示
+     */
+    public static <T> ResultVO<T> success(String message) {
+        return of(HttpStatus.OK, message, null);
+    }
 
-	/**
-	 * 请求成功，指定响应提示、响应数据
-	 * @param message
-	 * @param t
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> success(String message, T t) {
-		ResultVO<T> vo = success();
-		vo.setMessage(message);
-		vo.setData(t);
-		return vo;
-	}
+    /**
+     * 请求成功，指定响应数据
+     */
+    public static <T> ResultVO<T> success(T data) {
+        return of(HttpStatus.OK, null, data);
+    }
 
-	/**
-	 * 请求失败
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> failure() {
-		ResultVO<T> vo = new ResultVO<>();
-		vo.setStatus(HttpStatus.BAD_REQUEST.value());
-		vo.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
-		return vo;
-	}
+    /**
+     * 请求成功，指定响应提示、响应数据
+     */
+    public static <T> ResultVO<T> success(String message, T data) {
+        return of(HttpStatus.OK, message, data);
+    }
 
-	/**
-	 * 请求失败，指定响应提示
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> failure(String message) {
-		ResultVO<T> vo = failure();
-		vo.setMessage(message);
-		return vo;
-	}
+    /**
+     * 请求失败
+     */
+    public static <T> ResultVO<T> failure() {
+        return of(HttpStatus.BAD_REQUEST, null, null);
+    }
 
-	/**
-	 * 请求失败，指定响应数据
-	 * @param <T>
-	 * @return
-	 */
-	public static <T> ResultVO<T> failure(T t) {
-		ResultVO<T> vo = failure();
-		vo.setData(t);
-		return vo;
-	}
+    /**
+     * 请求失败，指定响应提示
+     */
+    public static <T> ResultVO<T> failure(String message) {
+        return of(HttpStatus.BAD_REQUEST, message, null);
+    }
 
+    /**
+     * 请求失败，指定响应提示、响应数据
+     */
+    public static <T> ResultVO<T> failure(String message, T data) {
+        return of(HttpStatus.BAD_REQUEST, message, data);
+    }
 }
