@@ -20,9 +20,8 @@ import org.quartz.CronExpression;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.*;
-import sun.net.util.URLUtil;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
 

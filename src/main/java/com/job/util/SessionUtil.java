@@ -2,15 +2,17 @@ package com.job.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.job.model.po.User;
+import lombok.experimental.UtilityClass;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
- * @author  
- * @date 2020/3/27 14:09
- **/
+ * 会话工具类
+ */
+@UtilityClass
 public class SessionUtil {
 
     /**
@@ -28,8 +30,11 @@ public class SessionUtil {
      * @return
      */
     private static HttpSession getSession() {
-        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        return attrs.getRequest().getSession();
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        if (attrs instanceof ServletRequestAttributes servletRequest) {
+            return servletRequest.getRequest().getSession();
+        }
+        throw new IllegalStateException("No request bound to current thread");
     }
 
     /**
@@ -93,10 +98,7 @@ public class SessionUtil {
      */
     public static boolean isSuperUser() {
         User userInfo = getUserInfo();
-        if (userInfo != null && userInfo.getRole() == 1) {
-            return true;
-        }
-        return false;
+        return userInfo != null && userInfo.getRole() == 1;
     }
 
 }

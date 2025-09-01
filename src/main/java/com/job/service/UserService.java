@@ -15,7 +15,7 @@ import com.job.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ public class UserService {
      * UserMapper
      */
     @Resource
-    public UserMapper userMapper;
+    private UserMapper userMapper;
 
     /**
      * 用户名、密码校验
